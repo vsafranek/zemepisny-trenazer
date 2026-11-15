@@ -1,0 +1,16 @@
+{
+  "name": "Zeměpisný trenažér",
+  "short_name": "Zeměpis",
+  "description": "Kvíz na státy světa: vlajky, hlavní města, poloha na mapě a charakteristiky.",
+  "lang": "cs",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#13212c",
+  "theme_color": "#13212c",
+  "icons": [
+    { "src": "/icons/192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

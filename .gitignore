@@ -1,0 +1,6 @@
+node_modules
+public/data
+public/flags
+public/vendor
+public/icons
+public/sw.js

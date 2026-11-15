@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zeměpisný trenažér</title>
+<meta name="description" content="Kvíz na státy světa: vlajky, hlavní města, poloha na mapě a charakteristiky.">
+<meta name="theme-color" content="#13212c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Zeměpisný <span>trenažér</span></h1>
+    <div class="hdr-right">
+      <div class="stats" id="stats" hidden>
+        <span>Skóre <b id="sScore">0</b></span><span>Série <b id="sStreak">0</b></span><span><b id="sPos">1</b>/<b id="sTot">10</b></span>
+      </div>
+      <div class="tabs" id="tabs" role="tablist">
+        <button role="tab" data-v="play" aria-selected="true">Kvíz</button>
+        <button role="tab" data-v="stats" aria-selected="false">Statistiky</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="map" id="map"><span class="maptag" id="maptag">Načítám mapu…</span><div class="zoombtns"><button id="zIn" aria-label="Přiblížit">+</button><button id="zOut" aria-label="Oddálit">−</button><button id="zReset" aria-label="Zrušit přiblížení">⟲</button></div></div>
+
+  <section class="panel" id="setup">
+    <div class="group"><div class="label">Co trénovat</div><div class="chips" id="cMode"></div></div>
+    <div class="group"><div class="label">Oblast</div><div class="chips" id="cReg"></div></div>
+    <div class="group"><div class="label">Počet otázek</div><div class="chips" id="cLen"></div></div>
+    <p class="hint" id="poolInfo"></p>
+    <div class="row">
+      <button class="btn" id="start">Začít kvíz</button>
+      <button class="btn ghost" id="install" hidden>Nainstalovat aplikaci</button>
+    </div>
+  </section>
+
+  <section class="panel" id="quiz" hidden>
+    <div class="prog"><i id="bar"></i></div>
+    <p class="q" id="q"></p>
+    <div class="bigflag" id="flag"></div>
+    <div class="opts" id="opts"></div>
+    <div id="fb"></div>
+    <div class="row" id="nextRow" hidden><button class="btn" id="next">Další otázka</button></div>
+  </section>
+
+  <section class="panel" id="done" hidden>
+    <div class="label">Výsledek kola</div>
+    <div class="score" id="final"></div>
+    <p class="hint" id="finalNote"></p>
+    <ul class="miss" id="miss"></ul>
+    <div class="row">
+      <button class="btn" id="retry">Procvičit chyby</button>
+      <button class="btn ghost" id="again">Nové kolo</button>
+    </div>
+  </section>
+
+  <section class="panel" id="statsView" hidden>
+    <div class="row" style="justify-content:space-between;align-items:baseline">
+      <div class="label">Tvoje statistiky</div><span class="sync" id="sync"></span>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>umíš (80 %+)</span><span><i style="background:var(--mid)"></i>napůl</span><span><i style="background:var(--bad)"></i>pod 50 %</span><span><i style="background:var(--land-dim);box-shadow:0 0 0 1px var(--line)"></i>zatím ne</span></div>
+    <div class="cols">
+      <div><div class="label">Podle typu otázky</div><div class="bars" id="byType"></div></div>
+      <div><div class="label">Zvládnuté státy podle kontinentu</div><div class="bars" id="byCont"></div></div>
+    </div>
+    <div class="cols">
+      <div>
+        <div class="label">Nejslabší státy</div>
+        <ul class="miss" id="weakList"></ul>
+        <button class="btn sm" id="weakGo">Procvičit slabé státy</button>
+      </div>
+      <div><div class="label">Poslední kola</div><table class="rounds"><tbody id="roundList"></tbody></table></div>
+    </div>
+    <div class="group">
+      <div class="label">Kód zařízení</div>
+      <p class="hint">Statistiky se ukládají pod tímto kódem. Na jiném zařízení ho vlož níže a uvidíš tam stejné výsledky. Kód nikomu neposílej.</p>
+      <div class="row"><div class="code" id="uid" style="flex:1 1 260px"></div><button class="btn sm ghost" id="copyUid">Kopírovat</button></div>
+      <div class="row"><input class="inp" id="uidIn" placeholder="Vlož kód z jiného zařízení" autocomplete="off" spellcheck="false"><button class="btn sm" id="useUid">Použít kód</button></div>
+      <p class="hint" id="uidMsg" role="status"></p>
+    </div>
+  </section>
+</div>
+<script src="/vendor/d3.min.js"></script>
+<script src="/vendor/topojson-client.min.js"></script>
+<script src="/app.js" type="module"></script>
+</body>
+</html>
