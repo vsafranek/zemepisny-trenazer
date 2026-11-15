@@ -1,13 +1,12 @@
-// Generates public/data, public/flags, public/vendor, public/icons and public/sw.js from npm packages.
+// Generates public/data, public/flags and public/icons from npm packages (run before vite).
 import fs from 'node:fs';
-import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import sharp from 'sharp';
 import { presimplify, simplify, quantile } from 'topojson-simplify';
 
 const require = createRequire(import.meta.url);
 const pub = p => new URL('../public/' + p, import.meta.url);
-for (const d of ['data', 'flags', 'vendor', 'icons']) fs.mkdirSync(pub(d), { recursive: true });
+for (const d of ['data', 'flags', 'icons']) fs.mkdirSync(pub(d), { recursive: true });
 
 const CAP = { // Czech exonyms; others stay as in source
   Vienna:'Vídeň', Brussels:'Brusel', Prague:'Praha', Copenhagen:'Kodaň', Athens:'Atény', Rome:'Řím',
@@ -54,10 +53,6 @@ const world = simplify(t, quantile(t, 0.15));
 delete world.objects.land;
 fs.writeFileSync(pub('data/world.json'), JSON.stringify(world));
 
-const nm = p => new URL('../node_modules/' + p, import.meta.url);
-fs.copyFileSync(nm('d3/dist/d3.min.js'), pub('vendor/d3.min.js'));
-fs.copyFileSync(nm('topojson-client/dist/topojson-client.min.js'), pub('vendor/topojson-client.min.js'));
-
 const icon = fs.readFileSync(pub('icon.svg'));
 for (const [name, size, pad] of [['192', 192, 0], ['512', 512, 0], ['maskable-512', 512, 0.12], ['apple-180', 180, 0]]) {
   const inner = Math.round(size * (1 - 2 * pad));
@@ -65,16 +60,4 @@ for (const [name, size, pad] of [['192', 192, 0], ['512', 512, 0], ['maskable-51
     .png().toFile(new URL(`../public/icons/${name}.png`, import.meta.url).pathname);
 }
 
-// Service worker: precache everything the quiz needs offline; version = hash of those files.
-const files = [];
-const walk = d => fs.readdirSync(pub(d), { withFileTypes: true }).forEach(e =>
-  e.isDirectory() ? walk(d + e.name + '/') : files.push(d + e.name));
-walk('');
-const precache = files.filter(f => f !== 'sw.js' && !f.startsWith('sw.'));
-const hash = createHash('sha1');
-precache.forEach(f => hash.update(f).update(fs.readFileSync(pub(f))));
-const sw = fs.readFileSync(new URL('./sw.template.js', import.meta.url), 'utf8')
-  .replace('__VERSION__', hash.digest('hex').slice(0, 10))
-  .replace('__FILES__', JSON.stringify(['/', ...precache.filter(f => f !== 'index.html').map(f => '/' + f)]));
-fs.writeFileSync(pub('sw.js'), sw);
-console.log(`${countries.length} countries, ${precache.length} precached files`);
+console.log(`${countries.length} countries`);
