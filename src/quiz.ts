@@ -34,6 +34,7 @@ export const renderChips = () => { chips('cMode', MODES, 'mode'); chips('cReg', 
 
 export function showSetup() {
   show('setup');
+  setMapSize('mini');
   const pool = poolOf(settings.reg), name = regName(settings.reg);
   const seen = pool.filter(d => stats().c[d.c]).length;
   $('poolInfo').textContent = settings.mode === 'weak'

@@ -130,6 +130,10 @@ header{flex-wrap:nowrap;align-items:center}
 @media (max-width:420px){h1{font-size:17px}.tabs button{padding:6px 11px}}
 .map.compact{aspect-ratio:21/9}
 @media (max-width:520px){.map.compact{aspect-ratio:2/1}}
+.map.mini{aspect-ratio:4/1}
+@media (max-width:520px){.map.mini{aspect-ratio:5/2}}
+.map.mini svg{pointer-events:none}
+.map.mini .zoombtns{display:none}
 .qtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:-6px}
 .qmeta{font-size:14px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
 .qmeta b{color:var(--ink)}

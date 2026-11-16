@@ -85,9 +85,11 @@ export function paint(pool: Set<string>, mk: Record<string, Mark> = {}, extra: (
   }
 }
 
-/** compact: the map is only context (flags, capitals, facts), so the question gets the room. */
-export function setMapSize(size: 'compact' | 'normal') {
+/** compact: the map is only context (flags, capitals, facts), so the question gets the room.
+ *  mini: a small non-interactive picture of the chosen region (setup screen). */
+export function setMapSize(size: 'mini' | 'compact' | 'normal') {
   el.classList.toggle('compact', size === 'compact');
+  el.classList.toggle('mini', size === 'mini');
   sizeMarks();
 }
 
