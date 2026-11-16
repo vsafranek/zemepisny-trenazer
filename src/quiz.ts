@@ -87,7 +87,7 @@ function renderQuestion() {
   $('opts').className = 'opts ' + (Q.kind === 'flags' ? 'flags' : 'text');
   $('opts').innerHTML = Q.opts.map((o, i) => `<button class="opt" id="o${i}" data-c="${o.c}"><kbd>${i + 1}</kbd><span>${o.label}</span></button>`).join('');
   $('opts').hidden = !Q.opts.length;
-  $('fb').innerHTML = ''; $('nextRow').hidden = true;
+  $('fb').innerHTML = ''; $('sheet').hidden = true;
 
   setFind(!!Q.find);
   setTag(Q.find ? 'Klepni na stát' : regName(r.ctx.reg));
@@ -135,7 +135,8 @@ function renderAnswer() {
   setView(countryBox(Q.target));
   setTag(Q.target.n);
   card(Q.target, ok, !ok && Q.type === 'find' ? byC[c] : undefined);
-  $('nextRow').hidden = false;
+  $('sheet').hidden = false;
+  $('sheet').scrollTop = 0;
   $('next').textContent = r.i + 1 < r.list.length ? 'Další otázka' : 'Výsledek';
   $('next').focus({ preventScroll: true });
 }
