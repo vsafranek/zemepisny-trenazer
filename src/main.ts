@@ -1,6 +1,6 @@
 import './style.css';
 import { onStateClick } from './map';
-import { answer, answerFind, isAnswered, next, renderChips, resume, retryMisses, showSetup, startRound } from './quiz';
+import { answer, answerFind, isAnswered, next, quitRound, renderChips, resume, retryMisses, showSetup, startRound } from './quiz';
 import { openStats } from './stats';
 import { flush, pull, saveSettings, settings } from './store';
 import { $ } from './util';
@@ -14,6 +14,7 @@ $('start').onclick = () => startRound();
 $('again').onclick = showSetup;
 $('retry').onclick = retryMisses;
 $('next').onclick = next;
+$('quit').onclick = quitRound;
 $('weakGo').onclick = () => { settings.mode = 'weak'; saveSettings(); renderChips(); startRound(); };
 $('opts').onclick = e => { const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.opt'); if (b) answer(b.dataset.c!); };
 onStateClick(answerFind);

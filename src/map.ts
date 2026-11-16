@@ -85,6 +85,12 @@ export function paint(pool: Set<string>, mk: Record<string, Mark> = {}, extra: (
   }
 }
 
+/** compact: the map is only context (flags, capitals, facts), so the question gets the room. */
+export function setMapSize(size: 'compact' | 'normal') {
+  el.classList.toggle('compact', size === 'compact');
+  sizeMarks();
+}
+
 export function setFind(on: boolean) {
   el.classList.toggle('find', on);
   svg.style('touch-action', on ? 'none' : 'pan-y');

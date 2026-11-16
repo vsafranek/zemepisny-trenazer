@@ -2,7 +2,7 @@
 import type { Mode } from '../api/_shared';
 import { LENS, MODES, REGS, TYPES, regName, type Country, type Region, type Settings } from './config';
 import { DATA, byC, poolOf } from './data';
-import { countryBox, paint, regionBox, setFind, setTag, setView, type Mark } from './map';
+import { countryBox, paint, regionBox, setFind, setMapSize, setTag, setView, type Mark } from './map';
 import { pickQuestion, type Ctx, type Question } from './questions';
 import { mastery, record, recordRound, saveSettings, settings, stats } from './store';
 import { $, flagImg, fmt, pct, shuffle } from './util';
@@ -76,9 +76,10 @@ function ask() {
 
 function renderQuestion() {
   const r = R!, Q = r.Q!, t = r.list[r.i]!;
-  $('sScore').textContent = String(r.score); $('sStreak').textContent = String(r.streak);
-  $('sPos').textContent = String(r.i + 1); $('sTot').textContent = String(r.list.length);
+  renderMeta();
   $('bar').style.width = (r.i / r.list.length) * 100 + '%';
+  setMapSize(Q.find || Q.focus ? 'normal' : 'compact');
+  scrollTo({ top: 0 });
   $('q').innerHTML = Q.q;
   $('flag').innerHTML = Q.flag ? flagImg(Q.flag) : '';
   $('flag').hidden = !Q.flag;
@@ -101,13 +102,26 @@ export function answer(c: string) {
   r.answered = true; r.pick = c; r.ok = ok;
   if (ok) { r.score++; r.streak++; } else { r.streak = 0; if (!r.miss.includes(t)) r.miss.push(t); }
   record({ c: t.c, t: Q.type, ok, ts: new Date().toISOString() });
+  if (!ok) navigator.vibrate?.(60);
   renderAnswer();
 }
 export const answerFind = (c: string) => { if (R?.Q?.find) answer(c); };
 
+function renderMeta() {
+  const r = R!;
+  $('qmeta').innerHTML = `<b>${r.i + 1}</b>/${r.list.length} · správně <b>${r.score}</b>${r.streak > 1 ? ` · série <b>${r.streak}</b>` : ''}`;
+}
+
+/** Leaves the round early; answers given so far are already saved. */
+export function quitRound() {
+  if (!R || R.over) return;
+  R.over = true;
+  showSetup();
+}
+
 function renderAnswer() {
   const r = R!, Q = r.Q!, c = r.pick!, ok = !!r.ok;
-  $('sScore').textContent = String(r.score); $('sStreak').textContent = String(r.streak);
+  renderMeta();
   document.querySelectorAll<HTMLButtonElement>('.opt').forEach(b => {
     b.disabled = true;
     b.classList.add(b.dataset.c === Q.target.c ? 'ok' : b.dataset.c === c ? 'bad' : 'fade');

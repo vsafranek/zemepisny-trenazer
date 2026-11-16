@@ -18,14 +18,9 @@
 <div class="wrap">
   <header>
     <h1>Zeměpisný <span>trenažér</span></h1>
-    <div class="hdr-right">
-      <div class="stats" id="stats" hidden>
-        <span>Skóre <b id="sScore">0</b></span><span>Série <b id="sStreak">0</b></span><span><b id="sPos">1</b>/<b id="sTot">10</b></span>
-      </div>
-      <div class="tabs" id="tabs" role="tablist">
-        <button role="tab" data-v="play" aria-selected="true">Kvíz</button>
-        <button role="tab" data-v="stats" aria-selected="false">Statistiky</button>
-      </div>
+    <div class="tabs" id="tabs" role="tablist">
+      <button role="tab" data-v="play" aria-selected="true">Kvíz</button>
+      <button role="tab" data-v="stats" aria-selected="false">Statistiky</button>
     </div>
   </header>
 
@@ -36,19 +31,23 @@
     <div class="group"><div class="label">Oblast</div><div class="chips" id="cReg"></div></div>
     <div class="group"><div class="label">Počet otázek</div><div class="chips" id="cLen"></div></div>
     <p class="hint" id="poolInfo"></p>
-    <div class="row">
+    <div class="row actions">
       <button class="btn" id="start">Začít kvíz</button>
       <button class="btn ghost" id="install" hidden>Nainstalovat aplikaci</button>
     </div>
   </section>
 
   <section class="panel" id="quiz" hidden>
+    <div class="qtop">
+      <span class="qmeta" id="qmeta" aria-live="polite"></span>
+      <button class="link" id="quit">Ukončit kolo</button>
+    </div>
     <div class="prog"><i id="bar"></i></div>
     <p class="q" id="q"></p>
     <div class="bigflag" id="flag"></div>
     <div class="opts" id="opts"></div>
     <div id="fb"></div>
-    <div class="row" id="nextRow" hidden><button class="btn" id="next">Další otázka</button></div>
+    <div class="row actions" id="nextRow" hidden><button class="btn" id="next">Další otázka</button></div>
   </section>
 
   <section class="panel" id="done" hidden>
