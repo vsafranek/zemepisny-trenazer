@@ -36,10 +36,8 @@ export function showSetup() {
   show('setup');
   setMapSize('mini');
   const pool = poolOf(settings.reg), name = regName(settings.reg);
-  const seen = pool.filter(d => stats().c[d.c]).length;
-  $('poolInfo').textContent = settings.mode === 'weak'
-    ? `Vybere státy, které ti v oblasti „${name}“ jdou nejhůř, a pak ty, které jsi ještě neviděl (zatím ${seen} z ${pool.length}).`
-    : `${pool.length} států v oblasti „${name}“. Po každé odpovědi uvidíš kartu státu a jeho polohu na mapě.`;
+  $('poolInfo').hidden = settings.mode !== 'weak';
+  $('poolInfo').textContent = 'Nejdřív státy, které ti jdou nejhůř, pak ty, které jsi ještě neviděl.';
   setTag(name);
   paint(new Set(pool.map(d => d.c)));
   setView(regionBox(settings.reg));
