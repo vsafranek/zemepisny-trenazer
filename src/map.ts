@@ -53,6 +53,8 @@ export function setView(box: Box, instant = false) {
   let [x0, y0, x1, y1] = box, w = x1 - x0, h = y1 - y0;
   if (w / h < asp) { const nw = h * asp; x0 -= (nw - w) / 2; w = nw; } else { const nh = w / asp; y0 -= (nh - h) / 2; h = nh; }
   vb = [x0, y0, w, h];
+  // Allow zooming out from a close-up until the whole world fits, so players can see the surroundings.
+  zoom.scaleExtent([Math.min(1, w / W, h / H), 16]);
   svg.interrupt().call(zoom.transform, zoomIdentity);
   sizeMarks();
   (instant ? svg : svg.transition().duration(650).ease(easeCubicInOut)).attr('viewBox', vb.join(' '));
