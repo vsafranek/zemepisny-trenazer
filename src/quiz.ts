@@ -77,7 +77,6 @@ function renderQuestion() {
   const r = R!, Q = r.Q!, t = r.list[r.i]!;
   renderMeta();
   $('bar').style.width = (r.i / r.list.length) * 100 + '%';
-  setMapSize(Q.find || Q.focus ? 'normal' : 'compact');
   scrollTo({ top: 0 });
   $('q').innerHTML = Q.q;
   $('flag').innerHTML = Q.flag ? flagImg(Q.flag) : '';

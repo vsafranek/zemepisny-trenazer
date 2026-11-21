@@ -41,15 +41,16 @@ const sizeMarks = () => { marks.attr('r', markR()); rings.selectAll('circle').at
 
 // Pinch/wheel/drag zoom; on touch, one finger pans only in find mode so the page still scrolls otherwise.
 const zoom = d3zoom<SVGSVGElement, unknown>().scaleExtent([1, 16]).clickDistance(6)
-  .filter(e => e.type === 'wheel' || (e.type.startsWith('touch') ? el.classList.contains('find') || e.touches.length > 1 : !e.button))
   .on('zoom', e => { layer.attr('transform', e.transform.toString()); zk = e.transform.k; sizeMarks(); });
-svg.call(zoom).on('dblclick.zoom', null).style('touch-action', 'pan-y');
+svg.call(zoom).on('dblclick.zoom', null);
 $('zIn').onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 2);
 $('zOut').onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 0.5);
 $('zReset').onclick = () => svg.transition().duration(300).call(zoom.transform, zoomIdentity);
 
+let lastBox: Box = WORLD_BOX, fitW = 0, fitH = 0;
 export function setView(box: Box, instant = false) {
-  const asp = el.clientWidth / el.clientHeight || 16 / 9;
+  lastBox = box; fitW = el.clientWidth; fitH = el.clientHeight;
+  const asp = fitW / fitH || 16 / 9;
   let [x0, y0, x1, y1] = box, w = x1 - x0, h = y1 - y0;
   if (w / h < asp) { const nw = h * asp; x0 -= (nw - w) / 2; w = nw; } else { const nh = w / asp; y0 -= (nh - h) / 2; h = nh; }
   vb = [x0, y0, w, h];
@@ -59,7 +60,10 @@ export function setView(box: Box, instant = false) {
   sizeMarks();
   (instant ? svg : svg.transition().duration(650).ease(easeCubicInOut)).attr('viewBox', vb.join(' '));
 }
-addEventListener('resize', () => setView([vb[0], vb[1], vb[0] + vb[2], vb[1] + vb[3]], true));
+// The map's height follows the layout (header + panel), so refit whenever its size changes.
+new ResizeObserver(() => {
+  if (Math.abs(el.clientWidth - fitW) > 2 || Math.abs(el.clientHeight - fitH) > 2) setView(lastBox, true);
+}).observe(el);
 
 export function regionBox(reg: string): Box {
   if (reg === 'all') return WORLD_BOX;
@@ -87,17 +91,14 @@ export function paint(pool: Set<string>, mk: Record<string, Mark> = {}, extra: (
   }
 }
 
-/** compact: the map is only context (flags, capitals, facts), so the question gets the room.
- *  mini: a small non-interactive picture of the chosen region (setup screen). */
-export function setMapSize(size: 'mini' | 'compact' | 'normal') {
-  el.classList.toggle('compact', size === 'compact');
+/** mini: a small non-interactive picture of the chosen region (setup screen); normal: fills the free space. */
+export function setMapSize(size: 'mini' | 'normal') {
   el.classList.toggle('mini', size === 'mini');
   sizeMarks();
 }
 
 export function setFind(on: boolean) {
   el.classList.toggle('find', on);
-  svg.style('touch-action', on ? 'none' : 'pan-y');
 }
 export const setTag = (text: string) => { $('maptag').textContent = text; };
 export const onStateClick = (f: (code: string) => void) =>

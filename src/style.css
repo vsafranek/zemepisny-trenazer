@@ -19,15 +19,17 @@ img{max-width:100%}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:16px/1.45 var(--body);
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:max(16px,env(safe-area-inset-top,0px)) max(40px,env(safe-area-inset-bottom,0px));margin:0}
-.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-bottom,0px));margin:0;
+  height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
+html{height:100%}
+.wrap{max-width:760px;height:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
 h1{font:700 clamp(20px,5vw,26px)/1.1 var(--display);margin:0;letter-spacing:-.01em}
 h1 span{color:var(--accent)}
 
-.map{position:relative;background:var(--sea);border-radius:14px;overflow:hidden;aspect-ratio:16/9;border:1px solid var(--line)}
-@media (max-width:520px){.map{aspect-ratio:4/3}}
-.map svg{display:block;width:100%;height:100%}
+/* map takes whatever height the header and panel leave */
+.map{position:relative;background:var(--sea);border-radius:14px;overflow:hidden;border:1px solid var(--line);flex:1 1 0;min-height:140px}
+.map svg{display:block;width:100%;height:100%;touch-action:none}
 .map path.cty{fill:var(--land-dim);stroke:var(--border);stroke-width:.6;vector-effect:non-scaling-stroke}
 .map path.cty.pool{fill:var(--land)}
 .map .grat{fill:none;stroke:var(--line);stroke-width:.5;vector-effect:non-scaling-stroke;opacity:.7}
@@ -45,7 +47,7 @@ h1 span{color:var(--accent)}
 .zoombtns button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--ink);font:700 18px/1 var(--body);cursor:pointer}
 .maptag{position:absolute;left:10px;bottom:8px;font:600 12px var(--body);color:var(--muted);background:color-mix(in srgb,var(--surface) 80%,transparent);padding:2px 8px;border-radius:99px}
 
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;flex:0 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain}
 .label{font:700 11px var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font:600 14px var(--body);border:1.5px solid var(--line);background:transparent;color:var(--ink);padding:8px 13px;border-radius:99px;cursor:pointer}
@@ -64,7 +66,6 @@ h1 span{color:var(--accent)}
 .bigflag{display:flex;justify-content:center}
 .bigflag img{width:min(260px,70%);aspect-ratio:4/3;object-fit:cover;border-radius:6px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgb(0 0 0/.12)}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:420px){.opts.text{grid-template-columns:1fr}}
 .opt{font:600 16px var(--body);text-align:left;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;display:flex;gap:10px;align-items:center;min-width:0}
 .opt kbd{font:700 11px var(--body);color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 6px;flex:none}
 .opt:disabled{cursor:default}
@@ -72,7 +73,7 @@ h1 span{color:var(--accent)}
 .opt.bad{background:var(--bad-bg);border-color:var(--bad)}
 .opt.fade{opacity:.5}
 .opts.flags .opt{padding:8px;justify-content:center;position:relative}
-.opts.flags img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px var(--line)}
+.opts.flags img{width:auto;max-width:100%;height:min(16vh,130px);aspect-ratio:4/3;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px var(--line)}
 .opts.flags kbd{position:absolute;top:12px;left:12px;background:var(--surface)}
 
 .fb{border-radius:12px;padding:14px;display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:start;border:1.5px solid}
@@ -115,7 +116,7 @@ h1 span{color:var(--accent)}
 @media (max-width:620px){.cols{grid-template-columns:1fr}}
 .cols>*{min-width:0;display:flex;flex-direction:column;gap:10px}
 .code{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;word-break:break-all;user-select:all}
-.inp{font:500 15px var(--body);background:var(--bg);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;flex:1 1 220px;min-width:0}
+.inp{font:500 16px var(--body);background:var(--bg);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;flex:1 1 220px;min-width:0}
 .btn.sm{font-size:14px;padding:10px 14px;flex:none}
 .sync{font-size:13px;font-weight:600;color:var(--muted)}
 .sync.ok{color:var(--ok)} .sync.warn{color:var(--mid)}
@@ -128,17 +129,15 @@ h1 span{color:var(--accent)}
 @media (hover:none){.opt kbd{display:none}}
 header{flex-wrap:nowrap;align-items:center}
 @media (max-width:420px){h1{font-size:17px}.tabs button{padding:6px 11px}}
-.map.compact{aspect-ratio:21/9}
-@media (max-width:520px){.map.compact{aspect-ratio:2/1}}
-.map.mini{aspect-ratio:4/1}
-@media (max-width:520px){.map.mini{aspect-ratio:5/2}}
+.map.mini{flex:0 0 auto;height:clamp(80px,16vh,180px);min-height:0}
+.map.mini ~ #setup{flex:1 1 auto}
 .map.mini svg{pointer-events:none}
 .map.mini .zoombtns{display:none}
 .qtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:-6px}
 .qmeta{font-size:14px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
 .qmeta b{color:var(--ink)}
 .link{font:600 14px var(--body);background:none;border:0;padding:4px 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.bigflag img{width:min(260px,70%,34vh)}
+.bigflag img{width:min(200px,55%,22vh)}
 .actions{position:sticky;bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:5}
 .actions .btn{box-shadow:0 6px 20px rgb(0 0 0/.18)}
 @media (prefers-reduced-motion:no-preference){

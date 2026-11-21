@@ -8,5 +8,5 @@ export function show(view: View) {
   const tab = view === 'statsView' ? 'stats' : 'play';
   document.querySelectorAll<HTMLButtonElement>('#tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.v === tab)));
   setFind(false);
-  if (view !== 'quiz') setMapSize('normal');
+  setMapSize('normal');
 }
