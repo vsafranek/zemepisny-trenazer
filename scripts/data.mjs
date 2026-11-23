@@ -36,7 +36,8 @@ const cont = x => x.region === 'Americas' ? (x.subregion === 'South America' ? '
 const min = s => s.replace(/<\?xml[^>]*>/, '').replace(/<!--[\s\S]*?-->/g, '').replace(/\s+/g, ' ').replace(/> </g, '><').trim();
 
 const C = require('world-countries').filter(x => x.independent);
-const flagDir = new URL('../node_modules/flag-icons/flags/4x3/', import.meta.url);
+// Flags in their real proportions (public domain); flag-icons redraws every flag to 4:3.
+const flagDir = new URL('../node_modules/svg-country-flags/svg/', import.meta.url);
 const countries = C.map(x => {
   const f = x.cca2.toLowerCase();
   fs.writeFileSync(pub(`flags/${f}.svg`), min(fs.readFileSync(new URL(f + '.svg', flagDir), 'utf8')));
